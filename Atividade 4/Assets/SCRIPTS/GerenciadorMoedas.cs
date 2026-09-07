@@ -10,11 +10,6 @@ public class GerenciadorMoedas : MonoBehaviour
 
     public static event Action<int> AoAlterarMoedas;
 
-    private void Start()
-    {
-        ResetarMoedas();
-    }
-
     public static void AdicionarMoeda(string idMoeda)
     {
         quantidadeMoedas++;
@@ -36,7 +31,7 @@ public class GerenciadorMoedas : MonoBehaviour
     }
 
     public static void AtualizarInterface()
-{
-    AoAlterarMoedas?.Invoke(quantidadeMoedas);
-}
+    {
+        AoAlterarMoedas?.Invoke(quantidadeMoedas);
+    }
 }

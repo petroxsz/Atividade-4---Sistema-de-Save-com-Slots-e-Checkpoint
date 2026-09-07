@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -30,6 +31,28 @@ public class ZonaVitoria : MonoBehaviour
             GerenciadorMoedas.quantidadeMoedas +
             " / " +
             totalMoedas;
+
+        FazerAutosave();
+    }
+
+    private void FazerAutosave()
+    {
+        DadosSave dados = new DadosSave();
+
+        dados.nomeFase =
+            string.IsNullOrEmpty(proximaFase)
+            ? SceneManager.GetActiveScene().name
+            : proximaFase;
+
+        dados.checkpointAtivado = false;
+        dados.moedasNoCheckpoint = 0;
+
+        dados.moedasColetadasCheckpoint =
+            new List<string>();
+
+        GerenciadorSave.Instancia.Salvar(0, dados);
+
+        Debug.Log("Autosave realizado ao concluir a fase.");
     }
 
     private void Update()
@@ -37,9 +60,12 @@ public class ZonaVitoria : MonoBehaviour
         if (!venceu)
             return;
 
-        if (Keyboard.current.enterKey.wasPressedThisFrame)
+        if (Keyboard.current != null &&
+            Keyboard.current.enterKey.wasPressedThisFrame)
         {
             GerenciadorMoedas.ResetarMoedas();
+
+            PlayerPrefs.SetInt("CarregandoSave", 0);
 
             if (!string.IsNullOrEmpty(proximaFase))
             {

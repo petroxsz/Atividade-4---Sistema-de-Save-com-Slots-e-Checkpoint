@@ -40,7 +40,7 @@ public class ZonaVitoria : MonoBehaviour
         DadosSave dados = new DadosSave();
 
         dados.nomeFase =
-            string.IsNullOrEmpty(proximaFase)
+            string.IsNullOrWhiteSpace(proximaFase)
             ? SceneManager.GetActiveScene().name
             : proximaFase;
 
@@ -67,12 +67,14 @@ public class ZonaVitoria : MonoBehaviour
 
             PlayerPrefs.SetInt("CarregandoSave", 0);
 
-            if (!string.IsNullOrEmpty(proximaFase))
+            if (!string.IsNullOrWhiteSpace(proximaFase))
             {
                 SceneManager.LoadScene(proximaFase);
             }
             else
             {
+                GerenciadorSave.Instancia.ApagarSlot(0);
+
                 SceneManager.LoadScene("Menu");
             }
         }

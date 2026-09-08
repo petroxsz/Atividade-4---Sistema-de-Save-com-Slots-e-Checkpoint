@@ -56,36 +56,52 @@ public class GerenciadorSave : MonoBehaviour
     }
 
     public void CarregarJogo(int slot)
+{
+    DadosSave dados = Carregar(slot);
+
+    if (dados == null)
+        return;
+
+    if (slot != 0)
     {
-        DadosSave dados = Carregar(slot);
-
-        if (dados == null)
-            return;
-
-        PlayerPrefs.SetInt("CarregandoSave", 1);
-
-        PlayerPrefs.SetInt(
-            "CheckpointAtivado",
-            dados.checkpointAtivado ? 1 : 0
-        );
-
-        PlayerPrefs.SetInt(
-            "MoedasCheckpoint",
-            dados.moedasNoCheckpoint
-        );
-
-        string moedas = string.Join(
-            "|",
-            dados.moedasColetadasCheckpoint
-        );
-
-        PlayerPrefs.SetString(
-            "MoedasColetadasCheckpoint",
-            moedas
-        );
-
-        SceneManager.LoadScene(dados.nomeFase);
+        Salvar(0, dados);
     }
+
+    PlayerPrefs.SetInt("CarregandoSave", 1);
+
+    PlayerPrefs.SetInt(
+        "CheckpointAtivado",
+        dados.checkpointAtivado ? 1 : 0
+    );
+
+    PlayerPrefs.SetInt(
+        "MoedasCheckpoint",
+        dados.moedasNoCheckpoint
+    );
+
+    string moedas = string.Join(
+        "|",
+        dados.moedasColetadasCheckpoint
+    );
+
+    PlayerPrefs.SetString(
+        "MoedasColetadasCheckpoint",
+        moedas
+    );
+
+    SceneManager.LoadScene(dados.nomeFase);
+}
+
+public void ApagarSlot(int slot)
+{
+    string caminho = ObterCaminho(slot);
+
+    if (File.Exists(caminho))
+    {
+        File.Delete(caminho);
+        Debug.Log("Slot " + slot + " apagado.");
+    }
+}
 
     public bool SlotExiste(int slot)
     {
